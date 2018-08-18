@@ -35,12 +35,11 @@ class TestPane(private val image: Image) : JPanel() {
 fun main(args: Array<String>) {
 
     val mulFile = IndexedMulFile("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul")
-    val artMulReader = ArtMulReader()
+    val artMulReader = ArtMulReader(mulFile)
 //    val item = 0x4000 + 0x3df4
     val item = 5
     println("Index: ${mulFile.getIndex(item)}")
-    val image = artMulReader.readImage(mulFile.getIndex(item), mulFile.getInputStream(item)
-            ?: throw RuntimeException("Whoops!"))
+    val image = artMulReader.readImage(item)
 
     val frame = JFrame("Testing").also {
         it.defaultCloseOperation = JFrame.EXIT_ON_CLOSE

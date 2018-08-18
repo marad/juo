@@ -1,7 +1,6 @@
 package io.github.marad.juo.mul
 
 import java.io.DataInputStream
-import java.io.InputStream
 
 typealias Color = Short
 
@@ -27,11 +26,12 @@ fun Color.blue(): Int {
 
 data class Image(val width: Int, val height: Int, val data: Array<Color>)
 
-class ArtMulReader {
+class ArtMulReader(private val indexedMulFile: IndexedMulFile) {
 
-    fun readImage(index: Index, inputStream: InputStream): Image? {
-        val dataInputStream = DataInputStream(inputStream)
-        return if (isLandTile(index)) {
+    fun readImage(imageId: Int): Image? {
+
+        val dataInputStream = DataInputStream(indexedMulFile.getInputStream(imageId))
+        return if (isLandTile(indexedMulFile.getIndex(imageId))) {
             readLandTile(dataInputStream)
         } else {
             readStatic(dataInputStream)
