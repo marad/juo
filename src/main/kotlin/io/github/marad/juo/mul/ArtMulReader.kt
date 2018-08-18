@@ -53,7 +53,7 @@ class ArtMulReader(private val indexedMulFile: IndexedMulFile) {
 
         for (y in 22..43) {
             lineWidth -= 2
-            for (x in startX until (startX + lineWidth)) { // TODO: switch to until?
+            for (x in startX until (startX + lineWidth)) {
                 data[y * 44 + x] = dataInputStream.readShort().toBigEndian()
             }
             startX += 1
