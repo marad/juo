@@ -7,9 +7,19 @@ import java.awt.Dimension
 import java.awt.Graphics
 import javax.swing.JFrame
 import javax.swing.JPanel
+import javax.swing.Timer
 
-class TestPane(private val image: Image) : JPanel() {
+class TestPane(private val images: List<Image>) : JPanel() {
+    private var frame = 0
+    private var image = images[frame]
     private val scale = 6
+
+    private val timer = Timer(200) {
+        this.frame += 1
+        this.frame = this.frame.rem(images.size)
+        this.image = images[frame]
+        this.repaint()
+    }.also { it.start() }
 
     override fun getPreferredSize(): Dimension {
         return Dimension(image.width * scale, image.height * scale)
@@ -34,19 +44,22 @@ class TestPane(private val image: Image) : JPanel() {
 
 fun main(args: Array<String>) {
 
+    val animReader = AnimMulReader(IndexedMulFile("D:\\Gry\\UO\\anim.idx", "D:\\Gry\\UO\\anim.mul"))
     val mulFile = IndexedMulFile("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul")
     val artMulReader = ArtMulReader(mulFile)
 //    val item = 0x4000 + 0x3df4
     val item = 5
     println("Index: ${mulFile.getIndex(item)}")
-    val image = artMulReader.readImage(item)
+//    val image = artMulReader.readImage(item)
+    val images = animReader.getAnimation(111)
 
     val frame = JFrame("Testing").also {
         it.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         it.layout = BorderLayout()
-        it.add(TestPane(image ?: throw RuntimeException("Image not loaded!")))
+        it.add(TestPane(images ?: throw RuntimeException("Image not loaded!")))
         it.pack()
         it.setLocationRelativeTo(null)
         it.isVisible = true
     }
+
 }
