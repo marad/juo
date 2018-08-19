@@ -2,13 +2,13 @@ package io.github.marad.juo.mul
 
 import java.io.DataInputStream
 
-class AnimMulReader(private val indexedMulFacade: IndexFacade) {
+class AnimMulReader(private val indexedAnimMul: IndexFacade) {
     fun getAnimation(animId: Int): List<Image> {
-        val index = indexedMulFacade.getIndex(animId)
+        val index = indexedAnimMul.getIndex(animId)
         if (index.lookup == null) {
             throw RuntimeException("Invalid animation id") // TODO: better exceptions
         }
-        val stream = DataInputStream(indexedMulFacade.getInputStream(animId))
+        val stream = DataInputStream(indexedAnimMul.getInputStream(animId))
         val palette = readPalette(stream)
         stream.mark(stream.available())
         val frameCount = stream.readInt().toBigEndian()
