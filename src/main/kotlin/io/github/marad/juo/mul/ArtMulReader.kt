@@ -26,12 +26,12 @@ fun Color.blue(): Int {
 
 data class Image(val width: Int, val height: Int, val data: Array<Color>)
 
-class ArtMulReader(private val indexedMulFile: IndexedMulFile) {
+class ArtMulReader(private val indexedMulFacade: IndexFacade) {
 
     fun readImage(imageId: Int): Image? {
 
-        val dataInputStream = DataInputStream(indexedMulFile.getInputStream(imageId))
-        return if (isLandTile(indexedMulFile.getIndex(imageId))) {
+        val dataInputStream = DataInputStream(indexedMulFacade.getInputStream(imageId))
+        return if (isLandTile(indexedMulFacade.getIndex(imageId))) {
             readLandTile(dataInputStream)
         } else {
             readStatic(dataInputStream)
@@ -102,7 +102,7 @@ class ArtMulReader(private val indexedMulFile: IndexedMulFile) {
 }
 
 //fun main(args: Array<String>){
-//    val mulFile = IndexedMulFile("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul")
+//    val mulFile = CachedIndexFacade("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul")
 //    val artMulReader = ArtMulReader()
 //    val image = artMulReader.readImage(mulFile.getIndex(128), mulFile.getInputStream(128) ?: throw RuntimeException("No data!"))
 //

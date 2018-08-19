@@ -44,12 +44,11 @@ class TestPane(private val images: List<Image>) : JPanel() {
 
 fun main(args: Array<String>) {
 
-    val animReader = AnimMulReader(IndexedMulFile("D:\\Gry\\UO\\anim.idx", "D:\\Gry\\UO\\anim.mul"))
-    val mulFile = IndexedMulFile("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul")
-    val artMulReader = ArtMulReader(mulFile)
+    val indexCreator = IndexCreator()
+    val animReader = AnimMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\anim.idx", "D:\\Gry\\UO\\anim.mul"))
+    val artMulReader = ArtMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul"))
 //    val item = 0x4000 + 0x3df4
     val item = 5
-    println("Index: ${mulFile.getIndex(item)}")
 //    val image = artMulReader.readImage(item)
     val images = animReader.getAnimation(111)
 
