@@ -12,7 +12,7 @@ import javax.swing.Timer
 class TestPane(private val images: List<Image>) : JPanel() {
     private var frame = 0
     private var image = images[frame]
-    private val scale = 6
+    private val scale = 3
 
     private val timer = Timer(200) {
         this.frame += 1
@@ -47,15 +47,15 @@ fun main(args: Array<String>) {
     val indexCreator = IndexCreator()
     val animReader = AnimMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\anim.idx", "D:\\Gry\\UO\\anim.mul"))
     val artMulReader = ArtMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul"))
+    val gumpartReader = GumpartMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\gumpidx.mul", "D:\\Gry\\UO\\gumpart.mul"))
 //    val item = 0x4000 + 0x3df4
-    val item = 5
 //    val image = artMulReader.readImage(item)
     val images = animReader.getAnimation(111)
 
     val frame = JFrame("Testing").also {
         it.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         it.layout = BorderLayout()
-        it.add(TestPane(images ?: throw RuntimeException("Image not loaded!")))
+        it.add(TestPane(listOf(gumpartReader.getGump(74) ?: throw RuntimeException("Image not loaded!"))))
         it.pack()
         it.setLocationRelativeTo(null)
         it.isVisible = true
