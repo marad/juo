@@ -37,13 +37,14 @@ UO Network protocol implementation
 
 ## Graphics Module
 
-- [ ] choose graphics library (slick2d, sdl, raw lwjgl?)
+- [ ] choose graphics library (slick2d, sdl, raw lwjgl?, libgdx, maybe vulkan? :o)
 - [ ] displaying images
 - [ ] playing animations
 
 ## Sound Module
 
 - [ ] playing sounds
+- [ ] loading sounds
 
 ## Game 
 
