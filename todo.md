@@ -14,7 +14,7 @@ Tools for reading UOs MUL files.
 - [x] reading art.mul
 - [x] reading animX.mul
 - [x] bodyconv.def
-- [ ] facade over multiple animX.mul files
+- [x] facade over multiple animX.mul files
 - [ ] animdata.mul - this file has mostly zeros is it any good?
 - [ ] cliloc files
 - [ ] fonts.mul (do I want to use original fonts?)
