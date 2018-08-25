@@ -23,6 +23,14 @@ fun Color.blue(): Int {
     return (intVal and 0x1F) shl 3
 }
 
+fun Color.rgba(): Int {
+    return if (this < 0) {
+        0
+    } else {
+        (this.red() shl 24) or (this.green() shl 16) or (this.blue() shl 8) or 0xFF
+    }
+}
+
 
 data class Image(val width: Int, val height: Int, val data: Array<Color>)
 

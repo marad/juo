@@ -1,6 +1,64 @@
 package io.github.marad.juo.mul
 
 import java.io.DataInputStream
+import java.io.RandomAccessFile
+
+fun main(args: Array<String>) {
+    val defs = BodyConvDefinitions("D:\\Gry\\UO\\Bodyconv.def")
+    defs.load()
+    println(defs.getMapping(866))
+}
+
+private data class BodyConvMapping(val animId: Int, val animFileIndex: Int, val animIdInFile: Int)
+private class BodyConvDefinitions(private val randomAccessFile: RandomAccessFile) {
+
+    private lateinit var mappings: Map<Int, BodyConvMapping>
+
+    constructor(path: String) : this(RandomAccessFile(path, "r"))
+
+    fun getMapping(animId: Int): BodyConvMapping {
+        return mappings.getOrDefault(animId, BodyConvMapping(animId, 0, animId))
+    }
+
+    fun load() {
+        mappings = generateSequence { randomAccessFile.readLine() }
+                .map { removeComment(it) }
+                .filter { it.isNotBlank() }
+                .map { readMapping(it) }
+                .map { it.animId to it }
+                .toMap()
+    }
+
+    private fun removeComment(line: String): String {
+        val commentStart = line.indexOf('#')
+        return if (commentStart >= 0) {
+            line.substring(0 until commentStart)
+        } else {
+            line
+        }
+    }
+
+    private fun readMapping(line: String): BodyConvMapping {
+        val parsedLine = line.split("\\s+".toRegex())
+                .filter { it.isNotBlank() }
+                .map { it.toInt() }
+
+        val animId = parsedLine[0]
+        return if (parsedLine[1] != -1) {
+            BodyConvMapping(animId, 1, parsedLine[1])
+        } else if (parsedLine[2] != -1) {
+            BodyConvMapping(animId, 2, parsedLine[2])
+        } else if (parsedLine[3] != -1) {
+            BodyConvMapping(animId, 3, parsedLine[3])
+        } else if (parsedLine[4] != -1) {
+            BodyConvMapping(animId, 4, parsedLine[4])
+        } else {
+            BodyConvMapping(animId, 0, animId)
+        }
+
+    }
+
+}
 
 class AnimMulReader(private val indexedAnimMul: IndexFacade) {
     fun getAnimation(animId: Int): List<Image> {
