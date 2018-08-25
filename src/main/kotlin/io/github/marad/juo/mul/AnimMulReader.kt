@@ -2,13 +2,61 @@ package io.github.marad.juo.mul
 
 import java.io.DataInputStream
 import java.io.RandomAccessFile
+import java.nio.file.Paths
 
-fun main(args: Array<String>) {
-    val defs = BodyConvDefinitions("D:\\Gry\\UO\\Bodyconv.def")
-    defs.load()
-    println(defs.getMapping(866))
+/********************************************************************************
+ * Module's Public API
+ */
+interface AnimMulFacade {
+    fun getAnimation(animId: Int): List<Image>
 }
 
+class AnimMulCreator {
+    fun create(animFilesPath: String, useBodyConf: Boolean = true): AnimMulFacade {
+        if (useBodyConf) {
+            return CompoundAnimMul(animFilesPath).also { it.load() }
+        } else {
+            val indexCreator = IndexCreator()
+            return AnimMulReader(indexCreator.regularIndex(
+                    Paths.get(animFilesPath, "anim.idx").toString(),
+                    Paths.get(animFilesPath, "anim.mul").toString()
+            ))
+        }
+    }
+}
+
+/********************************************************************************
+ * Module main implementaiton. Abstracts away using multiple anim files with
+ * bodyconv.def file
+ */
+private class CompoundAnimMul(private val animFilesPath: String) : AnimMulFacade {
+    private lateinit var muls: Array<AnimMulReader>
+    private val animMappings = BodyConvDefinitions(Paths.get(animFilesPath, "Bodyconv.def").toString())
+
+    override fun getAnimation(animId: Int): List<Image> {
+        val mapping = animMappings.getMapping(animId)
+        println("Found mapping: $mapping")
+        return muls[mapping.animFileIndex].getAnimation(mapping.animIdInFile)
+    }
+
+    fun load() {
+        animMappings.load()
+        val indexCreator = IndexCreator()
+        muls = (1..5).mapIndexed { index, it ->
+            val baseName = if (it == 1) "anim" else "anim$it"
+            println("$baseName at $index")
+            AnimMulReader(indexCreator.regularIndex(
+                    Paths.get(animFilesPath, "$baseName.idx").toString(),
+                    Paths.get(animFilesPath, "$baseName.mul").toString()
+            ))
+        }.toTypedArray()
+    }
+
+}
+
+/********************************************************************************
+ * Reads bodyconv.dev mappings
+ */
 private data class BodyConvMapping(val animId: Int, val animFileIndex: Int, val animIdInFile: Int)
 private class BodyConvDefinitions(private val randomAccessFile: RandomAccessFile) {
 
@@ -60,9 +108,14 @@ private class BodyConvDefinitions(private val randomAccessFile: RandomAccessFile
 
 }
 
-class AnimMulReader(private val indexedAnimMul: IndexFacade) {
-    fun getAnimation(animId: Int): List<Image> {
+/********************************************************************************
+ * Reads animX.mul file
+ */
+private class AnimMulReader(private val indexedAnimMul: IndexFacade) : AnimMulFacade {
+    override fun getAnimation(animId: Int): List<Image> {
+        println("Getting animation $animId")
         val index = indexedAnimMul.getIndex(animId)
+        println("Index: $index")
         if (index.lookup == null) {
             throw RuntimeException("Invalid animation id") // TODO: better exceptions
         }
@@ -74,6 +127,7 @@ class AnimMulReader(private val indexedAnimMul: IndexFacade) {
 
         return (0 until frameCount)
                 .map {
+                    println("reading frame")
                     stream.reset()
                     stream.skip(frameOffsets[it].toLong())
                     readFrame(palette, stream)
