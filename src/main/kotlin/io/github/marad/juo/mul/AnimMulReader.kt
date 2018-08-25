@@ -80,9 +80,9 @@ private class BodyConvDefinitions(private val randomAccessFile: RandomAccessFile
     private fun removeComment(line: String): String {
         val commentStart = line.indexOf('#')
         return if (commentStart >= 0) {
-            line.substring(0 until commentStart)
+            line.substring(0 until commentStart).trim('"')
         } else {
-            line
+            line.trim('"')
         }
     }
 

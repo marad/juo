@@ -63,8 +63,8 @@ class Game(private val image: Image) : ApplicationListener {
 fun main(args: Array<String>) {
     val indexCreator = IndexCreator()
 //    val animReader = AnimMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\anim2.idx", "D:\\Gry\\UO\\anim2.mul"))
-    val animReader = AnimMulCreator().create("D:\\Gry\\UO", false)
-    val images = animReader.getAnimation(0)
+    val animReader = AnimMulCreator().create("D:\\Gry\\Electronic Arts\\Ultima Online Classic", true)
+    val images = animReader.getAnimation(233)
 
 
     val config = LwjglApplicationConfiguration()
