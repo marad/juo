@@ -9,10 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
-import io.github.marad.juo.mul.AnimMulCreator
-import io.github.marad.juo.mul.Image
-import io.github.marad.juo.mul.IndexCreator
-import io.github.marad.juo.mul.rgba
+import io.github.marad.juo.mul.*
 
 
 fun imageToTexture(image: Image): Texture {
@@ -26,7 +23,37 @@ fun imageToTexture(image: Image): Texture {
     return Texture(pixmap)
 }
 
-class Game(private val image: Image) : ApplicationListener {
+fun mapToTexture(mapMulReader: MapMulReader, radarColReader: RadarColReader, xRange: IntRange, yRange: IntRange): Texture {
+
+    val width = (xRange.endInclusive - xRange.first + 1) * 8
+    val height = (yRange.endInclusive - yRange.first + 1) * 8
+
+    val pixmap = Pixmap(width, height, Pixmap.Format.RGBA8888)
+    for (yBlock in yRange) {
+        for (xBlock in xRange) {
+            val block = mapMulReader.getBlock(xBlock, yBlock)
+            val startX = (xBlock - xRange.first) * 8
+            val startY = (yBlock - yRange.first) * 8
+            for (y in 0 until 8) {
+                for (x in 0 until 8) {
+                    val color = block.getCell(x, y).let { radarColReader.getTileColor(it.tileId) }.rgba()
+                    pixmap.drawPixel(startX + x, startY + y, color)
+                }
+            }
+        }
+    }
+
+    return Texture(pixmap)
+}
+
+fun mapBlockToImage(block: Block, radarColReader: RadarColReader): Image {
+    val data: Array<Color> = block.cells.map {
+        radarColReader.getTileColor(it.tileId)
+    }.toTypedArray()
+    return Image(8, 8, data)
+}
+
+class Game(private val getTexture: () -> Texture) : ApplicationListener {
     private lateinit var batch: SpriteBatch
     private lateinit var sprite: Sprite
     private lateinit var viewport: Viewport
@@ -55,9 +82,8 @@ class Game(private val image: Image) : ApplicationListener {
         camera = OrthographicCamera()
         viewport = FitViewport(640f, 480f)
 
-        val texture = imageToTexture(image)
         batch = SpriteBatch()
-        sprite = Sprite(texture)
+        sprite = Sprite(getTexture())
         sprite.setCenter(320f, 240f)
         sprite.scale(1f)
     }
@@ -71,13 +97,20 @@ fun main(args: Array<String>) {
     val indexCreator = IndexCreator()
 //    val animReader = AnimMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\anim2.idx", "D:\\Gry\\UO\\anim2.mul"))
     val animReader = AnimMulCreator().create("D:\\Gry\\Electronic Arts\\Ultima Online Classic", true)
+    val map = MapMulReader("D:\\Gry\\UO\\map1.mul")
+    val radarCol = RadarColReader("D:\\Gry\\UO\\radarcol.mul")
+    radarCol.load()
+
+    val block = map.getBlock(96, 172)
     val images = animReader.getAnimation(111)
+    val image = block.let { mapBlockToImage(it, radarCol) }
 
 
     val config = LwjglApplicationConfiguration().also {
         it.width = 640
         it.height = 480
     }
-    LwjglApplication(Game(images.first()), config)
+    LwjglApplication(Game { mapToTexture(map, radarCol, 80..110, 160..190) }, config)
+//    LwjglApplication(Game { imageToTexture(image)}, config)
 
 }

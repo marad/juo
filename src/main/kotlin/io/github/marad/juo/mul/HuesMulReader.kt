@@ -10,10 +10,9 @@ data class Hue(val colorTable: Array<Color>,
                val name: String)
 
 class HuesMulReader(private val huesMul: RandomAccessFile) {
-    val hues = readHues(loadAndMakeStream(huesMul))
+    constructor(huesMulPath: String) : this(RandomAccessFile(huesMulPath, "r"))
 
-    constructor(huesMulPath: String) :
-            this(RandomAccessFile(huesMulPath, "r"))
+    val hues = readHues(loadAndMakeStream(huesMul))
 
     fun getHue(hueId: Int): Hue? {
         return hues.getOrNull(hueId)
