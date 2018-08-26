@@ -37,10 +37,11 @@ Tools for reading UOs MUL files.
 - [ ] texmaps.mul - ??
 - [ ] speach.mul - ??
 - [ ] langcode.iff - ??
+
 ## Data Module?
 
 I'd like to have some kind of abstraction over UO data so I can store data in other 
-format if I'd like to recode MUL files into some more efficient structure.
+format if I'd like to recode MUL files into some more efficient structure later.
 
 ## Network Module
 
