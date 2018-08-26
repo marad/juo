@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import io.github.marad.juo.mul.*
+import io.github.marad.juo.mul.Color
 
 
 fun imageToTexture(image: Image): Texture {
