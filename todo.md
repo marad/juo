@@ -48,8 +48,8 @@ UO Network protocol implementation
 
 ## Graphics Module
 
-- [ ] choose graphics library (slick2d, sdl, raw lwjgl?, libgdx, maybe vulkan? :o)
-- [ ] displaying images
+- [x] choose graphics library - libgdx
+- [x] converting images to textures
 - [ ] playing animations
 
 ## Sound Module
