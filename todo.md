@@ -28,7 +28,7 @@ Tools for reading UOs MUL files.
 - [ ] speech.mul
 - [ ] stadifX.mul + facade
 - [ ] staticsX.mul + facade
-- [ ] tiledata.mul
+- [x] tiledata.mul
 - [ ] unifontX.mul + facade (co to za plik?)
 - [ ] light.mul (lightidx.mul)
 - [ ] multimap.rle - ??

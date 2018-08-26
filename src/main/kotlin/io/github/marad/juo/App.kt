@@ -87,6 +87,7 @@ class Game(private val getTexture: () -> Texture) : ApplicationListener {
         sprite = Sprite(getTexture())
         sprite.setCenter(320f, 240f)
         sprite.scale(1f)
+//        sprite.rotate(-45f)
     }
 
     override fun dispose() {
@@ -96,6 +97,7 @@ class Game(private val getTexture: () -> Texture) : ApplicationListener {
 
 fun main(args: Array<String>) {
     val indexCreator = IndexCreator()
+    val art = ArtMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul"))
 //    val animReader = AnimMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\anim2.idx", "D:\\Gry\\UO\\anim2.mul"))
     val animReader = AnimMulCreator().create("D:\\Gry\\Electronic Arts\\Ultima Online Classic", true)
     val map = MapMulReader("D:\\Gry\\UO\\map1.mul")
@@ -104,7 +106,8 @@ fun main(args: Array<String>) {
 
     val block = map.getBlock(96, 172)
     val images = animReader.getAnimation(111)
-    val image = block.let { mapBlockToImage(it, radarCol) }
+//    val image = block.let { mapBlockToImage(it, radarCol) }
+    val image = art.readImage(8)
 
 
     val config = LwjglApplicationConfiguration().also {
@@ -112,6 +115,6 @@ fun main(args: Array<String>) {
         it.height = 480
     }
     LwjglApplication(Game { mapToTexture(map, radarCol, 80..110, 160..190) }, config)
-//    LwjglApplication(Game { imageToTexture(image)}, config)
+//    LwjglApplication(Game { imageToTexture(image!!)}, config)
 
 }
