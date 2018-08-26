@@ -20,8 +20,8 @@ Tools for reading UOs MUL files.
 - [ ] fonts.mul (do I want to use original fonts?)
 - [x] gumpart.mul
 - [x] hues.mul
-- [ ] mapX.mul
-- [ ] facade over mapX.mul files
+- [x] mapX.mul
+- [ ] facade over mapX.mul files - don't think it's necessary
 - [ ] multi.mul
 - [ ] skills.mul (skills.idx)
 - [ ] sound.mul
@@ -33,7 +33,7 @@ Tools for reading UOs MUL files.
 - [ ] light.mul (lightidx.mul)
 - [ ] multimap.rle - ??
 - [ ] tex.idx - ??
-- [ ] radarcol.mul - ??
+- [x] radarcol.mul - tile colors for minimap (tileId -> color)
 - [ ] texmaps.mul - ??
 - [ ] speach.mul - ??
 - [ ] langcode.iff - ??
