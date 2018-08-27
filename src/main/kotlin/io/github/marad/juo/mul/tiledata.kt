@@ -25,6 +25,47 @@ data class StaticEntry(
 //        val unknown5: Byte,
         val height: Byte,
         val name: String) {
+
+    fun getWeaponClass(): Byte {
+        if (flags.isWeapon()) {
+            return quantity
+        } else {
+            throw RuntimeException("This is not a weapon!")
+        }
+    }
+
+    fun getArmorClass(): Byte {
+        if (flags.isArmor()) {
+            return quantity
+        } else {
+            throw RuntimeException("This is not an armor!")
+        }
+    }
+
+    fun getWearableLayer(): Byte {
+        if (flags.isWearable()) {
+            return quantity
+        } else {
+            throw RuntimeException("This is not wearable!")
+        }
+    }
+
+    fun getLightId(): Byte {
+        if (flags.isLightShource()) {
+            return quantity
+        } else {
+            throw RuntimeException("This is not a light source!")
+        }
+    }
+
+    fun getContains(): Byte {
+        if (flags.isContainer()) {
+            return quantity
+        } else {
+            throw RuntimeException("This is not a container!")
+        }
+    }
+
     companion object {
         val ENTRY_SIZE = 37
         val ENTRY_BLOCK_HEADER_SIZE = 4
@@ -96,7 +137,27 @@ fun Flags.isWeapon(): Boolean = (this and TiledataFlag.Weapon.value) == 1
 fun Flags.isTransparent(): Boolean = (this and TiledataFlag.Transparent.value) == 1
 fun Flags.isTranslucent(): Boolean = (this and TiledataFlag.Translucent.value) == 1
 fun Flags.isWall(): Boolean = (this and TiledataFlag.Wall.value) == 1
-// TODO: reszta
+fun Flags.isSurface(): Boolean = (this and TiledataFlag.Surface.value) == 1
+fun Flags.isBridge(): Boolean = (this and TiledataFlag.Bridge.value) == 1
+fun Flags.isGeneric(): Boolean = (this and TiledataFlag.Generic.value) == 1
+fun Flags.isWindow(): Boolean = (this and TiledataFlag.Window.value) == 1
+fun Flags.isNoShoot(): Boolean = (this and TiledataFlag.NoShoot.value) == 1
+fun Flags.isArticleA(): Boolean = (this and TiledataFlag.ArticleA.value) == 1
+fun Flags.isArticleAn(): Boolean = (this and TiledataFlag.ArticleAn.value) == 1
+fun Flags.isInternal(): Boolean = (this and TiledataFlag.Internal.value) == 1
+fun Flags.isFoliage(): Boolean = (this and TiledataFlag.Foliage.value) == 1
+fun Flags.isPartialHue(): Boolean = (this and TiledataFlag.PartialHue.value) == 1
+fun Flags.isMap(): Boolean = (this and TiledataFlag.Map.value) == 1
+fun Flags.isContainer(): Boolean = (this and TiledataFlag.Container.value) == 1
+fun Flags.isWearable(): Boolean = (this and TiledataFlag.Wearable.value) == 1
+fun Flags.isLightShource(): Boolean = (this and TiledataFlag.LightSource.value) == 1
+fun Flags.isAnimation(): Boolean = (this and TiledataFlag.Animation.value) == 1
+fun Flags.isNoDiagonal(): Boolean = (this and TiledataFlag.NoDiagonal.value) == 1
+fun Flags.isArmor(): Boolean = (this and TiledataFlag.Armor.value) == 1
+fun Flags.isRoof(): Boolean = (this and TiledataFlag.Roof.value) == 1
+fun Flags.isDoor(): Boolean = (this and TiledataFlag.Door.value) == 1
+fun Flags.isStairBack(): Boolean = (this and TiledataFlag.StairBack.value) == 1
+fun Flags.isStairRight(): Boolean = (this and TiledataFlag.StairRight.value) == 1
 
 enum class TiledataFlag(val value: Int) {
     Background(0x00000001),
