@@ -1,5 +1,8 @@
-package io.github.marad.juo.mul
+package io.github.marad.juo.mul.internal
 
+import io.github.marad.juo.mul.model.Block
+import io.github.marad.juo.mul.model.Cell
+import io.github.marad.juo.mul.model.Color
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.RandomAccessFile
@@ -8,23 +11,17 @@ import java.io.RandomAccessFile
  * Reads mapX.mul. Block represents 8x8 tiles made of Cell's
  */
 
-data class Cell(val tileId: Int, val altitude: Byte)
-
-data class Block(val cells: Array<Cell>) {
-    fun getCell(x: Int, y: Int): Cell {
-        return cells.getOrElse(y * 8 + x) {
-            throw RuntimeException("Invalid block index") // TODO: Better exception
-        }
-    }
-}
-
 class MapMulReader(private val mapMul: RandomAccessFile) {
     constructor(mapFilePath: String) : this(RandomAccessFile(mapFilePath, "r"))
 
-    fun getBlock(blockX: Int, blockY: Int): Block {
+    fun getBlock(blockX: Int, blockY: Int): Block? {
         val blockPosition = ((blockX.toLong() * BLOCK_HEIGHT) + blockY) * MAP_BLOCK_SIZE
-        mapMul.seek(blockPosition)
-        return readBlock()
+        return if (blockPosition > mapMul.length()) {
+            null
+        } else {
+            mapMul.seek(blockPosition)
+            readBlock()
+        }
     }
 
     private fun readBlock(): Block {

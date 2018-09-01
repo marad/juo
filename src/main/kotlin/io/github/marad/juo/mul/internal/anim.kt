@@ -1,5 +1,7 @@
-package io.github.marad.juo.mul
+package io.github.marad.juo.mul.internal
 
+import io.github.marad.juo.mul.model.Color
+import io.github.marad.juo.mul.model.Image
 import java.io.DataInputStream
 import java.io.RandomAccessFile
 import java.nio.file.Paths
@@ -35,7 +37,6 @@ private class CompoundAnimMul(private val animFilesPath: String) : AnimMulFacade
 
     override fun getAnimation(animId: Int): List<Image> {
         val mapping = animMappings.getMapping(animId)
-        println("Found mapping: $mapping")
         return muls[mapping.animFileIndex].getAnimation(mapping.animIdInFile)
     }
 
@@ -44,7 +45,6 @@ private class CompoundAnimMul(private val animFilesPath: String) : AnimMulFacade
         val indexCreator = IndexCreator()
         muls = (1..5).mapIndexed { index, it ->
             val baseName = if (it == 1) "anim" else "anim$it"
-            println("$baseName at $index")
             AnimMulReader(indexCreator.regularIndex(
                     Paths.get(animFilesPath, "$baseName.idx").toString(),
                     Paths.get(animFilesPath, "$baseName.mul").toString()
@@ -113,9 +113,7 @@ private class BodyConvDefinitions(private val randomAccessFile: RandomAccessFile
  */
 private class AnimMulReader(private val indexedAnimMul: IndexFacade) : AnimMulFacade {
     override fun getAnimation(animId: Int): List<Image> {
-        println("Getting animation $animId")
         val index = indexedAnimMul.getIndex(animId)
-        println("Index: $index")
         if (index.lookup == null) {
             throw RuntimeException("Invalid animation id") // TODO: better exceptions
         }
@@ -127,7 +125,6 @@ private class AnimMulReader(private val indexedAnimMul: IndexFacade) : AnimMulFa
 
         return (0 until frameCount)
                 .map {
-                    println("reading frame")
                     stream.reset()
                     stream.skip(frameOffsets[it].toLong())
                     readFrame(palette, stream)

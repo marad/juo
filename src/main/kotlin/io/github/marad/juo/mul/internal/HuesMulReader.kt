@@ -1,13 +1,10 @@
-package io.github.marad.juo.mul
+package io.github.marad.juo.mul.internal
 
+import io.github.marad.juo.mul.model.Color
+import io.github.marad.juo.mul.model.Hue
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.RandomAccessFile
-
-data class Hue(val colorTable: Array<Color>,
-               val tableStart: Int,
-               val tableEnd: Int,
-               val name: String)
 
 class HuesMulReader(private val huesMul: RandomAccessFile) {
     constructor(huesMulPath: String) : this(RandomAccessFile(huesMulPath, "r"))
@@ -19,7 +16,6 @@ class HuesMulReader(private val huesMul: RandomAccessFile) {
     }
 
     private fun readHues(stream: DataInputStream): List<Hue> {
-        println(stream.available())
         val groups = countGroups(stream)
         return (0 until groups).flatMap {
             stream.readInt() // read header
@@ -38,7 +34,6 @@ class HuesMulReader(private val huesMul: RandomAccessFile) {
     private fun loadAndMakeStream(file: RandomAccessFile): DataInputStream {
         val data = ByteArray(file.length().toInt())
         file.readFully(data)
-        println(file.length())
         return DataInputStream(ByteArrayInputStream(data))
     }
 

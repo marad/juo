@@ -1,5 +1,7 @@
-package io.github.marad.juo.mul
+package io.github.marad.juo.mul.internal
 
+import io.github.marad.juo.mul.model.Color
+import io.github.marad.juo.mul.model.Image
 import java.io.DataInputStream
 
 class GumpartMulReader(private val indexedGumpartMul: IndexFacade) {

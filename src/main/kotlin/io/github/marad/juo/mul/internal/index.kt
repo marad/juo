@@ -1,4 +1,4 @@
-package io.github.marad.juo.mul
+package io.github.marad.juo.mul.internal
 
 import java.io.ByteArrayInputStream
 import java.io.DataInput
