@@ -102,13 +102,6 @@ class Game(private val getTexture: () -> Texture) : ApplicationListener {
 
 fun main(args: Array<String>) {
     val mul = MulConfig().createMul("D:\\Gry\\UO")
-//    val indexCreator = IndexCreator()
-//    val art = ArtMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\artidx.mul", "D:\\Gry\\UO\\art.mul"))
-//    val animReader = AnimMulReader(indexCreator.regularIndex("D:\\Gry\\UO\\anim2.idx", "D:\\Gry\\UO\\anim2.mul"))
-//    val animReader = AnimMulCreator().create("D:\\Gry\\Electronic Arts\\Ultima Online Classic", true)
-//    val map = MapMulReader("D:\\Gry\\UO\\map1.mul")
-//    val radarCol = RadarColReader("D:\\Gry\\UO\\radarcol.mul")
-//    radarCol.load()
 
     val block = mul.getMapBlock(96, 172)
     val images = mul.getAnimation(111)

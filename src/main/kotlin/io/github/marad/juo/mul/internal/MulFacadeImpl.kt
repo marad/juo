@@ -1,7 +1,6 @@
 package io.github.marad.juo.mul.internal
 
 import io.github.marad.juo.mul.MulFacade
-import io.github.marad.juo.mul.model.Color
 import java.nio.file.Paths
 
 class MulFacadeImpl(private val uoPath: String) : MulFacade {
