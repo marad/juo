@@ -1,6 +1,7 @@
 package io.github.marad.juo.mul.internal
 
 import io.github.marad.juo.mul.MulFacade
+import io.github.marad.juo.mul.model.Cell
 import java.nio.file.Paths
 
 class MulFacadeImpl(private val uoPath: String) : MulFacade {
@@ -41,6 +42,8 @@ class MulFacadeImpl(private val uoPath: String) : MulFacade {
     override fun getHue(hueId: Int) = hues.getHue(hueId)
 
     override fun getMapBlock(blockX: Int, blockY: Int) = map.getBlock(blockX, blockY)
+
+    override fun getMapCell(x: Int, y: Int) = map.getCell(x, y)
 
     override fun getTileColor(tileId: Int) = radarCol.getTileColor(tileId)
 

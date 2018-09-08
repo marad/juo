@@ -13,6 +13,8 @@ interface MulFacade {
 
     fun getMapBlock(blockX: Int, blockY: Int): Block?
 
+    fun getMapCell(x: Int, y: Int): Cell?
+
     fun getTileColor(tileId: Int): Color?
 
     fun getTileData(tileId: Int): LandEntry?

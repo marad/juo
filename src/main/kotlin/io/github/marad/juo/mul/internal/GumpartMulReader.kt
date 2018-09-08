@@ -26,8 +26,8 @@ class GumpartMulReader(private val indexedGumpartMul: IndexFacade) {
         return (0 until height).map { stream.readInt().toBigEndian() }
     }
 
-    private fun readImageData(width: Int, height: Int, stream: DataInputStream): Array<Color> {
-        val imageData = Array<Color>(width * height) { -1 }
+    private fun readImageData(width: Int, height: Int, stream: DataInputStream): ShortArray {
+        val imageData = ShortArray(width * height) { -1 }
         var x = 0
         while (stream.available() > 0) {
             val color = stream.readShort().toBigEndian()

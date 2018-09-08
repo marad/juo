@@ -17,7 +17,6 @@ import io.github.marad.juo.mul.model.Image
 import io.github.marad.juo.mul.model.Color
 import io.github.marad.juo.mul.model.rgba
 
-
 fun imageToTexture(image: Image): Texture {
     val pixmap = Pixmap(image.width, image.height, Pixmap.Format.RGBA8888)
     for (y in 0 until image.height) {
@@ -53,9 +52,9 @@ fun mapToTexture(mul: MulFacade, xRange: IntRange, yRange: IntRange): Texture {
 }
 
 fun mapBlockToImage(block: Block, radarColReader: RadarColReader): Image {
-    val data: Array<Color> = block.cells.map {
+    val data: ShortArray = block.cells.map {
         radarColReader.getTileColor(it.tileId)
-    }.toTypedArray()
+    }.toShortArray()
     return Image(8, 8, data)
 }
 
@@ -106,14 +105,14 @@ fun main(args: Array<String>) {
     val block = mul.getMapBlock(96, 172)
     val images = mul.getAnimation(111)
 //    val image = block.let { mapBlockToImage(it, radarCol) }
-    val image = mul.getArt(8)
-
+    val image = mul.getArt(24)
 
     val config = LwjglApplicationConfiguration().also {
         it.width = 640
         it.height = 480
     }
-    LwjglApplication(Game { mapToTexture(mul, 80..110, 160..190) }, config)
+//    LwjglApplication(Game { mapToTexture(mul, 80..110, 160..190) }, config)
 //    LwjglApplication(Game { imageToTexture(image!!)}, config)
+    LwjglApplication(MapGame(mul), config)
 
 }

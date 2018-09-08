@@ -11,19 +11,21 @@ private fun isLandTile(index: Index): Boolean {
 class ArtMulReader(private val indexedArtMul: IndexFacade) {
 
     fun readImage(imageId: Int): Image? {
-
-        val dataInputStream = DataInputStream(indexedArtMul.getInputStream(imageId))
-        return if (isLandTile(indexedArtMul.getIndex(imageId))) {
-            readLandTile(dataInputStream)
-        } else {
-            readStatic(dataInputStream)
-        }
+        return indexedArtMul.getInputStream(imageId)
+                ?.let {
+                    val dataInputStream = DataInputStream(it)
+                    if (isLandTile(indexedArtMul.getIndex(imageId))) {
+                        readLandTile(dataInputStream)
+                    } else {
+                        readStatic(dataInputStream)
+                    }
+                }
     }
 
     private fun readLandTile(dataInputStream: DataInputStream): Image? {
         var startX = 22
         var lineWidth = 2
-        val data = Array<Color>(44 * 44) { -1 }
+        val data = ShortArray(44 * 44) { -1 }
 
         for (y in 0..21) {
             startX -= 1
@@ -54,7 +56,7 @@ class ArtMulReader(private val indexedArtMul: IndexFacade) {
                 .map { (it + height + 4) * 2 }
                 .toIntArray()
 
-        val pixelData = Array<Color>(width * height) { -1 }
+        val pixelData = ShortArray(width * height) { -1 }
 
         (0 until height)
                 .forEach { y ->

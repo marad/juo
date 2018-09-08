@@ -153,7 +153,7 @@ private class AnimMulReader(private val indexedAnimMul: IndexFacade) : AnimMulFa
         // do poprawnego nakladania obrazkow
         val width = stream.readShort().toBigEndian()
         val height = stream.readShort().toBigEndian()
-        val imageData = Array<Color>(width * height) { -1 }
+        val imageData = ShortArray(width * height) { -1 }
 
         var prevLineNum = 0xFF
         var y = 0

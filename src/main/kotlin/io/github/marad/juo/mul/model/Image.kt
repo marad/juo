@@ -26,4 +26,4 @@ fun Color.rgba(): Int {
 }
 
 
-data class Image(val width: Int, val height: Int, val data: Array<Color>)
+data class Image(val width: Int, val height: Int, val data: ShortArray)

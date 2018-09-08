@@ -18,6 +18,8 @@ dependencies {
     compile group: 'com.badlogicgames.gdx', name: 'gdx', version: '1.9.8'
     compile group: 'com.badlogicgames.gdx', name: 'gdx-platform', version: '1.9.8', classifier: 'natives-desktop'
     compile group: 'com.badlogicgames.gdx', name: 'gdx-backend-lwjgl', version: '1.9.8'
+    compile group: 'com.badlogicgames.gdx', name: 'gdx-tools', version: '1.9.8'
+
 }
 
 compileKotlin {
