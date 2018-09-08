@@ -60,7 +60,8 @@ UO Network protocol implementation
 
 ## Game 
 
-- [ ] map rendering 
+- [x] map rendering: ground
+- [ ] map rendering: statics
 - [ ] entities
 - [ ] player + controls
 - [ ] GUI

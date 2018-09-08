@@ -5,55 +5,12 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile
+import io.github.marad.juo.UoToGdx.drawOnPixmap
+import io.github.marad.juo.UoToGdx.imageToTexture
 import io.github.marad.juo.mul.MulFacade
 import io.github.marad.juo.mul.internal.MapMulReader
 import io.github.marad.juo.mul.model.Block
 import io.github.marad.juo.mul.model.Image
-import io.github.marad.juo.mul.model.rgba
-
-private fun imageToTexture(image: Image): Texture {
-    val pixmap = Pixmap(image.width, image.height, Pixmap.Format.RGBA8888)
-    for (y in 0 until image.height) {
-        for (x in 0 until image.width) {
-            val color = image.data[y * image.width + x].rgba()
-            pixmap.drawPixel(x, y, color)
-        }
-    }
-    return Texture(pixmap)
-}
-
-private fun drawOnPixmap(pixmap: Pixmap, image: Image, startX: Int, startY: Int) {
-    for (y in 0 until image.height) {
-        for (x in 0 until image.width) {
-            val color = image.data[y * image.width + x].rgba()
-            pixmap.drawPixel(startX + x, startY + y, color)
-        }
-    }
-}
-
-private fun prepareTilesTexture(images: List<Image?>): Texture {
-    val textureSize = 8196
-    val columns = textureSize / 44
-    val pixmap = Pixmap(textureSize, textureSize, Pixmap.Format.RGBA8888)
-    images.forEachIndexed { index, it ->
-        if (it != null) {
-            val x = index % columns
-            val y = index / columns
-            drawOnPixmap(pixmap, it, x * 44, y * 44)
-        }
-    }
-    return Texture(pixmap)
-}
-
-private fun splitRegions(texture: Texture, width: Int, height: Int): List<TextureRegion> {
-    val columns = texture.width / width
-    val rows = texture.height / height
-    return (0 until rows).flatMap { y ->
-        (0 until columns).map { x ->
-            TextureRegion(texture, x * width, y * height, width, height)
-        }
-    }
-}
 
 class GroundMapLayer(private val mul: MulFacade) : TiledMapTileLayer(
         MapMulReader.MAP_WIDTH, MapMulReader.MAP_HEIGHT,
@@ -110,3 +67,28 @@ class GroundMapLayer(private val mul: MulFacade) : TiledMapTileLayer(
         }
     }
 }
+
+private fun prepareTilesTexture(images: List<Image?>): Texture {
+    val textureSize = 8196
+    val columns = textureSize / 44
+    val pixmap = Pixmap(textureSize, textureSize, Pixmap.Format.RGBA8888)
+    images.forEachIndexed { index, it ->
+        if (it != null) {
+            val x = index % columns
+            val y = index / columns
+            drawOnPixmap(pixmap, it, x * 44, y * 44)
+        }
+    }
+    return Texture(pixmap)
+}
+
+private fun splitRegions(texture: Texture, width: Int, height: Int): List<TextureRegion> {
+    val columns = texture.width / width
+    val rows = texture.height / height
+    return (0 until rows).flatMap { y ->
+        (0 until columns).map { x ->
+            TextureRegion(texture, x * width, y * height, width, height)
+        }
+    }
+}
+
